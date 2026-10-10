@@ -32,10 +32,10 @@ tempreadtype3=''
 checkstring="James Cameron Rules"
 file_bin_seek(file,0)
 
-for(i=0; i<string_length(checkstring); i+=1)
+for(i=1; i<=string_length(checkstring); i+=1)
  {
  readbyte=file_bin_read_byte(file)
- if !string_byte_at(checkstring,i)=readbyte
+ if string_byte_at(checkstring,i)!=readbyte
   {
   file_bin_close(file)
   exit
