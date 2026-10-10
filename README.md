@@ -18,12 +18,12 @@ Modification, unpacking, and repacking is not implemented at this time, but is a
 
 
 # Hotkeys
-Page Up/Down: Fastest way of scrolling the file list for right now.
-Home: Jump to the beginning of the file list.
-End: Jump to the end of the file list.
-Ctrl + Left/Right: If having searched for a file previously, this finds the previous/next file, respectively.
-Ctrl + F: Shortcut to file search.
-Ctrl + G: Shortcut to file number jump.
+* Page Up/Down: Fastest way of scrolling the file list for right now.
+* Home: Jump to the beginning of the file list.
+* End: Jump to the end of the file list.
+* Ctrl + Left/Right: If having searched for a file previously, this finds the previous/next file, respectively.
+* Ctrl + F: Shortcut to file search.
+* Ctrl + G: Shortcut to file number jump.
 
 
 # Known Issues
