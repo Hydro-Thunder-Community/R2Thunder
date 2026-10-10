@@ -27,6 +27,7 @@ Modification, unpacking, and repacking is not implemented at this time, but is a
 
 
 # Known Issues
+- Not every texture's format is properly detected. As a result, a small few don't output with the right header.
 - Many Dreamcast assets don't extract with a proper data and reftable split, due to the data>reftable order in many of the files being flipped around.
 - Offroad Thunder uses the same file type (0x44) for other kinds of assets, and as a result, for the time being, the tool labels them all under Demo Reel Data.
 
