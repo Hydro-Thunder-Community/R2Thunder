@@ -82,8 +82,11 @@ cont=""
 
 screen=SCR_SPLASH
 
+EXPORTALL_PREFERCONV=1
+EXPORTALL_PREFERRAW=2
 exportall_file=0
-exportall_modeon=0
+exportall_dir=""
+exportall_mode=0
 
 //these have to be here or the create event gets ignored upon their re-activation, which will cause many code errors
 with(obj_closbutton)
@@ -230,7 +233,7 @@ if (processing)
   break
 
   case SCR_R2OPEN:
-
+  draw_text(0,368,"Exporting file "+string(exportall_file)+" of "+string(files[typeview])+"")
   break
   }
  }
