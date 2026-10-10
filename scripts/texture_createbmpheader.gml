@@ -45,7 +45,14 @@ switch type
  break
  }
 
-writefile=get_save_filename("BMP files|*.bmp",""+string(name)+".bmp")
+if (!exportall_mode)
+ {
+ writefile=get_save_filename("BMP files|*.bmp",""+string(name)+".bmp")
+ }
+else if (exportall_mode)
+ {
+ writefile=(exportall_dir+string("\")+string(name)+".bmp")
+ }
 
 if writefile=""
  {

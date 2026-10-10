@@ -28,21 +28,51 @@ writefile=0
 reftableminus=0
 
 //detection for conversion
-if assettype=TYPE_15P1TX || assettype=TYPE_14P2TX || assettype=TYPE_SOUND
+if (!exportall_mode)
  {
- extracttype=show_message_ext("Extract with conversion, or raw?","Convert","Raw","")
+ if assettype=TYPE_15P1TX || assettype=TYPE_14P2TX || assettype=TYPE_SOUND
+  {
+  extracttype=show_message_ext("Extract with conversion, or raw?","Convert","Raw","")
+  }
+ else
+  {
+  extracttype=EXTR_RAW
+  }
  }
-else
+else if exportall_mode=1
+ {
+ switch assettype
+  {
+  case TYPE_15P1TX:
+  case TYPE_14P2TX:
+  case TYPE_SOUND:
+  extracttype=EXTR_CONV
+  break
+
+  default:
+  extracttype=EXTR_RAW
+  break
+  }
+ }
+else if exportall_mode=2
  {
  extracttype=EXTR_RAW
  }
+
 
 //file=file_bin_open(currentfile,0)
 if extracttype=EXTR_RAW
  {
  var rawfile;
  //file_bin_seek(file,(assetloc))
- texfile=get_save_filename("R2RAW files|*.r2raw",""+string(assetname)+".r2raw")
+ if (!exportall_mode)
+  {
+  texfile=get_save_filename("R2RAW files|*.r2raw",""+string(assetname)+".r2raw")
+  }
+ else
+  {
+  texfile=(exportall_dir+string("\")+string(assetname)+".r2raw")
+  }
  if texfile=""
   {
   ping_message(MES_ABORTD)
@@ -71,8 +101,6 @@ if extracttype=EXTR_RAW
   file_bin_write_byte(writefile,readbyte)
   }*/
 
- ping_message(MES_EXPORT)
-
  /*reftablefile=file_bin_open((string(texfile))+string("_reftable"),2)
  reftablesize=(assettables+1)
  reftablebytes=(reftablesize*$10)
@@ -85,7 +113,11 @@ if extracttype=EXTR_RAW
  //file_bin_close(file)
  //file_bin_close(writefile)
  //file_bin_close(reftablefile)
- processing=0
+ if (!exportall_mode)
+  {
+  ping_message(MES_EXPORT)
+  processing=0
+  }
  }
 
 else if extracttype=EXTR_CONV
@@ -153,7 +185,10 @@ else if extracttype=EXTR_CONV
    readbyte=file_bin_read_byte(file)
    file_bin_write_byte(writefile,readbyte)
    }*/
-  ping_message(MES_EXPORT)
+  if (!exportall_mode)
+   {
+   ping_message(MES_EXPORT)
+   }
   break
 
   case TYPE_SOUND:
@@ -167,7 +202,10 @@ else if extracttype=EXTR_CONV
   buffer_save_append(soundbuf,soundfile)
   buffer_destroy(soundbuf)
 
-  ping_message(MES_EXPORT)
+  if (!exportall_mode)
+   {
+   ping_message(MES_EXPORT)
+   }
   break
   }
  }
