@@ -174,7 +174,7 @@ else if extracttype=EXTR_CONV
    }
   var texturebuf;
   texturebuf=buffer_create()
-  buffer_load_part(texturebuf,currentfile,(assetloc+readimgoffset),(assetsize-(readimgoffset-1)))
+  buffer_load_part(texturebuf,currentfile,(assetloc+readimgoffset),(assetsize-(readimgoffset-4)))
   buffer_save_append(texturebuf,texfile)
   buffer_destroy(texturebuf)
 
