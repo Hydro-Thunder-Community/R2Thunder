@@ -34,7 +34,7 @@ Modification, unpacking, and repacking is not implemented at this time, but is a
 # To-do:
 - UI QoL
 - CSH file support
-- extracting all of the files in the currently shown filter
+- bulk extracting all of the files in the currently shown filter
 - file replacement and adding
 
 
