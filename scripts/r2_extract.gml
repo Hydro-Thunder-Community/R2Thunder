@@ -85,14 +85,14 @@ if extracttype=EXTR_RAW
  file_bin_close(writefile)*/
  var filebuf, reftablebuf;
  filebuf=buffer_create()
- buffer_load_part(filebuf,currentfile,assetloc,(assetsize+2))
+ buffer_load_part(filebuf,currentfile,assetloc,(assetsize+4))
  buffer_save(filebuf,texfile)
  buffer_destroy(filebuf)
 
  reftablesize=(assettables+1)
  reftablebytes=(reftablesize*$10)
  reftablebuf=buffer_create()
- buffer_load_part(reftablebuf,currentfile,assetloc+(assetsize+3),reftablebytes)
+ buffer_load_part(reftablebuf,currentfile,assetloc+(assetsize+4),reftablebytes)
  buffer_save(reftablebuf,(string(texfile))+string("_reftable"))
  buffer_destroy(reftablebuf)
  /*for(i=0; i<=(assetsize+(2)); i+=1)
