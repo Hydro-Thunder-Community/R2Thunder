@@ -5,7 +5,7 @@ closes the r2 file, and goes back to the main screen
 */
 swap_screen(0)
 
-for(i=0; i<=types; i+=1)
+for(i=0; i<=numboftypes; i+=1)
  {
  ds_list_clear(names[i])
  ds_list_clear(sizes[i])
