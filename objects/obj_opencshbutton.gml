@@ -22,7 +22,10 @@ if (mouse_x>=x && mouse_x<=x+sprite_get_width(sprite_index)) && (mouse_y>=y && m
  mouseon=1
  if mouse_check_button_pressed(mb_left)
   {
-  show_message("This function is currently not implemented.")
+  with obj_main
+   {
+   csh_unpack(31000)
+   }
   }
  }
 else
@@ -38,6 +41,6 @@ applies_to=self
 draw_set_halign(fa_middle)
 
 draw_sprite(sprite_index,mouseon,x,y)
-draw_text_color(x+58,y+(sprite_height/8),"Open CSH",col[mouseon],col[mouseon],col[mouseon],col[mouseon],1)
+draw_text_color(x+57,y+(sprite_height/8),"Unpack CSH",col[mouseon],col[mouseon],col[mouseon],col[mouseon],1)
 
 draw_set_halign(fa_left)

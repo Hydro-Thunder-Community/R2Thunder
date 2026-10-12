@@ -215,7 +215,7 @@ applies_to=self
 draw_set_font(font0)
 draw_set_color(c_lime)
 
-draw_text(0,368,r2file[r2target])
+//draw_text(0,150,r2file[r2target])
 //draw_text(100,150,tempstring)
 
 if message>0
@@ -228,7 +228,14 @@ if (processing)
  switch screen
   {
   case SCR_SPLASH:
-  draw_text(150,270,"Reading R2 directory...("+string(entry)+")")
+  if (!exportall_mode)
+   {
+   draw_text(150,270,"Reading R2 directory...("+string(entry)+")")
+   }
+  else if (exportall_mode)
+   {
+   draw_text(0,368,"Exporting file "+string(exportall_file)+" of "+string(files[typeview])+"")
+   }
   //draw_text(150,270,"Reading R2 directory...")
   break
 
