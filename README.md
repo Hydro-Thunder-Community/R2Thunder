@@ -14,7 +14,7 @@ This tool can interface with R2s of the following:
 
 It can read the file directory, browse, filter, search, and extract any asset. As of this time, everything but textures and sounds of known formats are extracted raw, with their reftable. Known textures can be exported to BMP format, and known sounds can be exported to WAV format. Dreamcast PVRs can be detected, but they can only be extracted raw. Current efforts and documentation are primarily focused on the original arcade version.
 
-Modification, unpacking, and repacking is not implemented at this time, but is a goal.
+Modification and repacking is not implemented at this time, but is a goal.
 
 
 # Hotkeys
