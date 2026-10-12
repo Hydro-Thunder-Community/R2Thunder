@@ -38,7 +38,6 @@ Modification and repacking is not implemented at this time, but is a goal.
 
 # To-do:
 - UI QoL
-- CSH file support
 - file replacement and adding
 
 
