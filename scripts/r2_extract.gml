@@ -2,8 +2,6 @@
 r2_extract(assetname,assettype,r2filetype,assetlocation,assetsize,assetreftableentries)
 
 extracts a file from the r2, in either converted or a .r2raw file. if exported raw, the reftable gets written to a .r2raw_reftable file
-
-there's a bunch of commented out code here leftover from a significant rewrite
 */
 var file, writefile, extracttype, EXTR_RAW, EXTR_CONV, assetname, assettype, assetloc, assetsize, grabwidth, grabheight, readbyte, tempstring, tempstring2, tempstring3, readwoffset, readhoffset, data, bmpoffset, reftablesize, reftablebytes, reftablefile, reftableminus;
 
@@ -60,11 +58,10 @@ else if exportall_mode=2
  }
 
 
-//file=file_bin_open(currentfile,0)
 if extracttype=EXTR_RAW
  {
  var rawfile;
- //file_bin_seek(file,(assetloc))
+ 
  if (!exportall_mode)
   {
   texfile=get_save_filename("R2RAW files|*.r2raw",""+string(assetname)+".r2raw")
@@ -80,9 +77,7 @@ if extracttype=EXTR_RAW
   }
  ping_message(MES_PROCES)
  screen_redraw()
- /*writefile=file_bin_open(texfile,2)
- file_bin_rewrite(writefile)
- file_bin_close(writefile)*/
+
  var filebuf, reftablebuf;
  filebuf=buffer_create()
  buffer_load_part(filebuf,currentfile,assetloc,(assetsize+4))
@@ -95,24 +90,7 @@ if extracttype=EXTR_RAW
  buffer_load_part(reftablebuf,currentfile,assetloc+(assetsize+4),reftablebytes)
  buffer_save(reftablebuf,(string(texfile))+string("_reftable"))
  buffer_destroy(reftablebuf)
- /*for(i=0; i<=(assetsize+(2)); i+=1)
-  {
-  readbyte=file_bin_read_byte(file)
-  file_bin_write_byte(writefile,readbyte)
-  }*/
 
- /*reftablefile=file_bin_open((string(texfile))+string("_reftable"),2)
- reftablesize=(assettables+1)
- reftablebytes=(reftablesize*$10)
- file_bin_seek(file,(assetloc+(assetsize+3)))
- for(i=0; i<(reftablebytes); i+=1)
-  {
-  readbyte=file_bin_read_byte(file)
-  file_bin_write_byte(reftablefile,readbyte)
-  }*/
- //file_bin_close(file)
- //file_bin_close(writefile)
- //file_bin_close(reftablefile)
  if (!exportall_mode)
   {
   ping_message(MES_EXPORT)
@@ -166,7 +144,7 @@ else if extracttype=EXTR_CONV
    }
   file_bin_close(file)
   var texfile;
-  //file_bin_seek(file,(assetloc+readimgoffset))
+
   texfile=texture_createbmpheader(assetname,assettype,grabwidth,grabheight)
   if texfile=""
    {
@@ -178,13 +156,6 @@ else if extracttype=EXTR_CONV
   buffer_save_append(texturebuf,texfile)
   buffer_destroy(texturebuf)
 
-  /*writefile=file_bin_open(texfile,2)
-  file_bin_seek(writefile,bmpoffset)
-  for(i=0; i<=(assetsize-(readimgoffset-1)); i+=1)
-   {
-   readbyte=file_bin_read_byte(file)
-   file_bin_write_byte(writefile,readbyte)
-   }*/
   if (!exportall_mode)
    {
    ping_message(MES_EXPORT)

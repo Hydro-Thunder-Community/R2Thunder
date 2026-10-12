@@ -28,7 +28,6 @@ if exportall_dir=""
  exit
  }
 
-
 //read how many samples are in the file
 filesbuf=buffer_create()
 buffer_load_part(filesbuf,file,$0C,4)
@@ -47,7 +46,6 @@ for (i=0; i<numfiles; i+=1)
  buffer_set_pos(samplebuf,0)
  samplesize[i]=buffer_read_u32(samplebuf)
  buffer_clear(samplebuf)
- //show_message(string(samplesize[i]))
  }
 
 buffer_destroy(samplebuf)
@@ -57,8 +55,6 @@ offsetbuf=buffer_create()
 buffer_load_part(offsetbuf,file,$08,4)
 buffer_set_pos(offsetbuf,0)
 sampleoffset=buffer_read_u32(offsetbuf)
-
-//show_message(string(sampleoffset))
 
 //calculate where the sample data begins
 dataoffset=($10+(numfiles*8))+(sampleoffset)
