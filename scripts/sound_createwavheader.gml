@@ -27,6 +27,7 @@ buffer_write_hex(buff,"0200100064617461")
 buffer_set_pos(buff,40)
 buffer_write_u32(buff,samplesize)
 
+
 if (!exportall_mode)
  {
  file=get_save_filename("WAV files|*.wav",""+string(name)+".wav")
@@ -35,6 +36,8 @@ else if (exportall_mode)
  {
  file=(exportall_dir+string("\")+string(name)+".wav")
  }
+
+
 
 ping_message(MES_PROCES)
 screen_redraw()
