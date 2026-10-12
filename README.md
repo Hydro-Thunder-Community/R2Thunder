@@ -1,5 +1,5 @@
 # R2Thunder
-A tool to interface with the R2 file structure of Thunder games. Also can unpack the CSH sound banks from the arcade version of Hydro Thunder.
+A tool to interface with the R2 file structure of Thunder games.
 
 Written by AxlThunder in Game Maker 8.2. **No AI is used for any part of this project, and it will stay that way.**
 
@@ -11,6 +11,8 @@ This project currently uses the following GM82 extensions:
 This tool can interface with R2s of the following:
 * Hydro Thunder(Arcade and Dreamcast)
 * Offroad Thunder(Arcade)
+
+Also, it can unpack the CSH sound banks from the arcade version of Hydro Thunder.
 
 It can read the file directory, browse, filter, search, and extract any asset. As of this time, everything but textures and sounds of known formats are extracted raw, with their reftable. Known textures can be exported to BMP format, and known sounds can be exported to WAV format. Dreamcast PVRs can be detected, but they can only be extracted raw. It can also bulk extract everything shown on the currently selected filter.
 
