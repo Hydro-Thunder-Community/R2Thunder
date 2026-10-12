@@ -52,7 +52,7 @@ The reference table, each entry being 16 bytes long, contains the names of other
 
 
 ## The R2 File Header
-Every file in the R2 has a header that is specific to this format. It can vary in size, depending on the type of file that is present. For textures, it can either be 0x14 or 0x28 bytes in size. Every file always begins with the size in hex(3 bytes), followed by the file's type(1 byte). Uncompressed sound file headers are 8 bytes in size, with the last 4 being the sample data size.
+Every file in the R2 has a header that is specific to this format. It can vary in size, depending on the type of file that is present. For textures, it can either be 0x14 or 0x28 bytes in size. Every file always begins with the size(3 bytes), followed by the file's type(1 byte). Uncompressed sound file headers are 8 bytes in size, with the last 4 being the sample data size.
 
 
 ## Current known file types
