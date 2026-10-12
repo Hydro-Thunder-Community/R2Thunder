@@ -1,5 +1,5 @@
 # R2Thunder
-A tool to interface with the R2 file structure of Thunder games.
+A tool to interface with the R2 file structure of Thunder games. Also can unpack the CSH sound banks from the arcade version of Hydro Thunder.
 
 Written by AxlThunder in Game Maker 8.2. **No AI is used for any part of this project, and it will stay that way.**
 
@@ -12,7 +12,7 @@ This tool can interface with R2s of the following:
 * Hydro Thunder(Arcade and Dreamcast)
 * Offroad Thunder(Arcade)
 
-It can read the file directory, browse it, filter it, search it, and extract any asset. As of this time, everything but textures and sounds of known formats are extracted raw, with their reftable. Known textures can be exported to BMP format, and known sounds can be exported to WAV format. Dreamcast PVRs can be detected, but they can only be extracted raw. Current efforts and documentation are primarily focused on the original arcade version.
+It can read the file directory, browse, filter, search, and extract any asset. As of this time, everything but textures and sounds of known formats are extracted raw, with their reftable. Known textures can be exported to BMP format, and known sounds can be exported to WAV format. Dreamcast PVRs can be detected, but they can only be extracted raw. Current efforts and documentation are primarily focused on the original arcade version.
 
 Modification, unpacking, and repacking is not implemented at this time, but is a goal.
 
@@ -74,3 +74,10 @@ Every file in the R2 has a header that is specific to this format. It can vary i
 * boat start positions
 * water path data
 * object placement
+
+## The CSH Files
+These are uncompressed sound banks, stored in the D partition of a Hydro Thunder HDD. 
+* At 0x8 is the location where the sound data begins(4 bytes), from the start of where "DCS" is located.
+* At 0xC is the number of samples the bank contains(4 bytes).
+* Starting at 0xA, for as many samples as the file has, is the size of each sample, in 4 bytes each. There is also another set of 4 byte values for as many samples as the file contains. These aren't understood at this time.
+* The sample data is in the same format as the uncompressed sound data in the R2.
