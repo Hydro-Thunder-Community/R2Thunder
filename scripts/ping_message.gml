@@ -8,7 +8,7 @@ with obj_main
  cur_message=argument0
  if argument0=MES_OPENED
   {
-  mes[MES_OPENED]="James Cameron Rules! "+string(entries)+" entries."
+  mes[MES_OPENED]=""+r2sign[r2signindex]+"! "+string(entries)+" entries."
   }
  else if argument0=MES_TFILES
   {

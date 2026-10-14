@@ -3,19 +3,23 @@ r2_open()
 
 opens an r2 file, reads the file directory, and assigns the type to each file
 */
-var file, r2_file, checkstring, readbyte, readstring, entriesloc, headersize, filetableloc, fileentrysize, filenumber, tempsize, templocs, temptables, tempreadtype, tempreadtype2, tempreadtype3;
+var file, r2_file, checkstring, checkweaselstring, readbyte, readstring, entriesloc, headersize, headerbuf, signaturebuf, versioncheck, expectedversion, filetableloc, fileentrysize, filenumber, tempsize, templocs, temptables, tempreadtype, tempreadtype2, tempreadtype3;
 
 //generic information about r2 files
-file=file_bin_open(argument0,0)
 r2_file=argument0
 entriesloc=$2C
-filetableloc=$1FFFF4
+filetableloc=$200000
 fileentrysize=$4C
-headersize=3
+headersize=$88
 entry=0
 pvrcheck=""
+expectedversion=$00
 
-//our temp read values
+//our header read values
+headerbuf=buffer_create()
+signaturebuf=buffer_create()
+
+//our directory read values
 readstring=''
 tempsize=0
 templocs=0
@@ -26,31 +30,48 @@ tempreadtype=''
 tempreadtype2=''
 tempreadtype3=''
 
-//check for James Cameron Rules
-checkstring="James Cameron Rules"
-file_bin_seek(file,0)
+//load the header into a buffer that we will read stuff from
+buffer_load_part(headerbuf,r2_file,0,headersize)
 
-for(i=1; i<=string_length(checkstring); i+=1)
+//check for known signatures. if not the original, then try matching with Crank the Weasel's signature
+buffer_set_pos(headerbuf,0)
+signaturebuf=buffer_read_data(headerbuf,$13)
+
+if r2sign[R2VER_ORIG]!=signaturebuf
  {
- readbyte=file_bin_read_byte(file)
- if string_byte_at(checkstring,i)!=readbyte
+ if r2sign[R2VER_WEAS]=signaturebuf
   {
-  file_bin_close(file)
+  r2signindex=1
+  }
+ else
+  {
+  buffer_destroy(headerbuf)
+  buffer_destroy(signaturebuf)
+  show_message("Not a valid R2 signature!")
   exit
   }
  }
 
-//great! now time to check the number of file entries
-for(i=headersize; i>=0; i-=1)
+//check R2 version
+buffer_set_pos(headerbuf,$18)
+versioncheck=buffer_read_u8(headerbuf)
+
+if versioncheck!=expectedversion
  {
- file_bin_seek(file,(entriesloc+i))
- readbyte=file_bin_read_byte(file)
- entries+=(readbyte<<8*i)
+ buffer_destroy(headerbuf)
+ buffer_destroy(signaturebuf)
+ show_message("Not a valid R2 version!")
+ exit
  }
+
+//great! now time to check the number of file entries
+buffer_set_pos(headerbuf,entriesloc)
+entries=buffer_read_u32(headerbuf)
 
 //now then, can i grab a file listing? (oh dear god)
 filenumber=0
 
+//create our lists that we will populate with info from the r2
 for(i=0; i<=numboftypes; i+=1)
  {
  names[i]=ds_list_create()
@@ -62,9 +83,7 @@ for(i=0; i<=numboftypes; i+=1)
  filenum[i]=ds_list_create()
  }
 
-processing=1
-screen_redraw()
-
+//create our read buffers
 var readbuf, bytebuf, pvrcheckbuf, pvrcheck, pvroffset, dcbytebuf;
 readbuf=buffer_create()
 bytebuf=buffer_create()
@@ -72,23 +91,24 @@ dcbytebuf=buffer_create() //dreamcast flips the data>reftable order of many file
 pvrcheckbuf=buffer_create()
 pvroffset=0
 
-file_bin_close(file)
+//this flag makes obj_main output info about what the program is doing
+processing=1
 
 //read the file directory
-repeat(entries)
+while (entry<entries)
  {
  buffer_load_part(readbuf,r2_file,(filetableloc+(filenumber*fileentrysize)),fileentrysize)
 
- buffer_set_pos(readbuf,$0C)
+ buffer_set_pos(readbuf,$00)
  templocs=buffer_read_u32(readbuf)
 
- buffer_set_pos(readbuf,$10)
+ buffer_set_pos(readbuf,$04)
  tempsize=buffer_read_u32(readbuf)
 
- buffer_set_pos(readbuf,$14)
+ buffer_set_pos(readbuf,$08)
  temptables=buffer_read_u32(readbuf)
 
- buffer_set_pos(readbuf,$18)
+ buffer_set_pos(readbuf,$0C)
  tempstring=buffer_read_data(readbuf,11)
 
  buffer_load_part(bytebuf,r2_file,(templocs+3),1)
@@ -103,7 +123,6 @@ repeat(entries)
   buffer_load_part(dcbytebuf,r2_file,(templocs+3+(temptables*16)),1)
   tempreadtype2=buffer_read_u8(dcbytebuf)
   }
-
 
  temptype=r2_checkfiletype(tempreadtype2,tempreadtype)
 
@@ -253,4 +272,12 @@ r2target=1
 processing=0
 currentfile=argument0
 ping_message(MES_OPENED)
-swap_screen(1)
+swap_screen(SCR_R2OPEN)
+
+//destroy our buffers, we don't need them anymore
+buffer_destroy(readbuf)
+buffer_destroy(bytebuf)
+buffer_destroy(dcbytebuf)
+buffer_destroy(pvrcheckbuf)
+buffer_destroy(headerbuf)
+buffer_destroy(signaturebuf)

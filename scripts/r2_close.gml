@@ -32,5 +32,6 @@ startpos_top=0
 createdlist=0
 opened=0
 typeview=0
+r2signindex=0
 
 ping_message(MES_CLOSED)
