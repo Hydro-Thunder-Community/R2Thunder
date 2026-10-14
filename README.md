@@ -38,7 +38,9 @@ Modification and adding is not implemented at this time, but is a goal.
 
 
 # To-do:
-- UI QoL
+- UI features and QoL
+- when bulk extracting all files, seperate types by folder
+- retain csh's name when unpacking one
 - file replacement and adding
 
 
