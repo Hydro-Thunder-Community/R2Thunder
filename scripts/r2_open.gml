@@ -3,7 +3,7 @@ r2_open()
 
 opens an r2 file, reads the file directory, and assigns the type to each file
 */
-var file, r2_file, checkstring, checkweaselstring, readbyte, readstring, entriesloc, headersize, headerbuf, signaturebuf, versioncheck, expectedversion, filetableloc, fileentrysize, filenumber, tempsize, templocs, temptables, tempreadtype, tempreadtype2, tempreadtype3;
+var file, r2_file, checkstring, checkweaselstring, readbyte, readstring, entriesloc, headersize, headerbuf, signaturebuf, versioncheck, expectedversion, filetableloc, dirbuf, fileentrysize, filenumber, tempsize, templocs, temptables, tempreadtype, tempreadtype2, tempreadtype3;
 
 //generic information about r2 files
 r2_file=argument0
@@ -29,6 +29,7 @@ temptype2=0
 tempreadtype=''
 tempreadtype2=''
 tempreadtype3=''
+
 
 //load the header into a buffer that we will read stuff from
 buffer_load_part(headerbuf,r2_file,0,headersize)
@@ -94,22 +95,30 @@ pvroffset=0
 //this flag makes obj_main output info about what the program is doing
 processing=1
 
-//read the file directory
+buffer_destroy(headerbuf)
+buffer_destroy(signaturebuf)
+
+//read the file directory section
+dirbuf=buffer_create()
+buffer_load_part(dirbuf,r2_file,filetableloc,(fileentrysize*entries))
+
+//build the file list from it
+var curentrypos;
+curentrypos=0
+
 while (entry<entries)
  {
- buffer_load_part(readbuf,r2_file,(filetableloc+(filenumber*fileentrysize)),fileentrysize)
+ buffer_set_pos(dirbuf,$00+curentrypos)
+ templocs=buffer_read_u32(dirbuf)
 
- buffer_set_pos(readbuf,$00)
- templocs=buffer_read_u32(readbuf)
+ buffer_set_pos(dirbuf,$04+curentrypos)
+ tempsize=buffer_read_u32(dirbuf)
 
- buffer_set_pos(readbuf,$04)
- tempsize=buffer_read_u32(readbuf)
+ buffer_set_pos(dirbuf,$08+curentrypos)
+ temptables=buffer_read_u32(dirbuf)
 
- buffer_set_pos(readbuf,$08)
- temptables=buffer_read_u32(readbuf)
-
- buffer_set_pos(readbuf,$0C)
- tempstring=buffer_read_data(readbuf,11)
+ buffer_set_pos(dirbuf,$0C+curentrypos)
+ tempstring=buffer_read_data(dirbuf,11)
 
  buffer_load_part(bytebuf,r2_file,(templocs+3),1)
  readbyte=buffer_read_u8(bytebuf)
@@ -259,6 +268,7 @@ while (entry<entries)
  //we read an entry, so move onto the next one
  filenumber+=1
  entry+=1
+ curentrypos=(entry*fileentrysize)
  buffer_clear(readbuf)
  buffer_clear(bytebuf)
  buffer_clear(dcbytebuf)
@@ -279,5 +289,4 @@ buffer_destroy(readbuf)
 buffer_destroy(bytebuf)
 buffer_destroy(dcbytebuf)
 buffer_destroy(pvrcheckbuf)
-buffer_destroy(headerbuf)
-buffer_destroy(signaturebuf)
+buffer_destroy(dirbuf)
