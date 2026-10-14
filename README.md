@@ -11,6 +11,7 @@ This project currently uses the following GM82 extensions:
 This tool can interface with R2s of the following:
 * Hydro Thunder(Arcade and Dreamcast)
 * Offroad Thunder(Arcade)
+* Crank the Weasel(signature and file directory can be read, but extraction is not tested)
 
 Also, it can unpack the CSH sound banks from the arcade version of Hydro Thunder.
 
@@ -18,7 +19,7 @@ It can read the file directory, browse, filter, search, and extract any asset. A
 
 Current efforts and documentation are primarily focused on the original arcade version.
 
-Modification and repacking is not implemented at this time, but is a goal.
+Modification and adding is not implemented at this time, but is a goal.
 
 
 # Hotkeys
@@ -44,7 +45,11 @@ Modification and repacking is not implemented at this time, but is a goal.
 # Technical Details
 Efforts to document this format are still ongoing, so the information below is subject to additions and changes.
 
-The R2 is a WAD like format. The header, in true Hydro Thunder developer fashion, begins with James Cameron Rules. R2Thunder uses this to verify the file being opened is an R2. At 0x2C is the total number of files it contains. For example, HT.R2, the R2 from the original arcade version of Hydro Thunder, has 4,558 files. The file directory begins at 0x200000, and the file data begins at 0x800000. R2Thunder begins reading from 0x1FFFF4, for string alignment reasons. Each file entry, except for the very first, begins with 12 bytes whose purpose aren't yet known, followed by the file's location(4 bytes), the file's size(4 bytes), the number of reference table entries(4 bytes), the name of the file(11 bytes, plain text), and a plain text name, which is also seen twice at the very beginning of the file.
+The R2 is a WAD like format. The header of most known R2s, in true Hydro Thunder developer fashion, begins with "James Cameron Rules". The game uses this as part of verifying it is an R2, which R2Thunder does as well. In Crank the Weasel, this changes to "Hydro Thunder Rules". At 0x2C is the total number of files it contains(4 bytes). At 0x14 is the header's size, which in every known R2, is set to 136 bytes. 0x18 is the version number, though no currently known R2 changes this from 0.
+
+The file directory begins at 0x200000, and the file data begins at 0x800000. These two address locations are baked into the R2's header, at 0x20 and 0x24 respectively. 
+
+Each file entry begins with the file's location(4 bytes), followed by the file's size(4 bytes), the number of reference table entries(4 bytes), the name of the file(11 bytes, plain text), a plain text name(which is also seen twice in the R2's header), and finally, 12 bytes of currently unknown purpose.
 
 
 ## The R2 RefTable
@@ -58,12 +63,12 @@ Every file in the R2 has a header that is specific to this format. It can vary i
 ## Current known file types
 * 0x41: animation data
 * 0x42, 0x4D, 0x54: textures
-* 0x44: demo mode data
+* 0x44: demo mode data(Offroad Thunder uses this type for more than just demo mode data)
 * 0x47: models
 * 0x48: world data
-* 0x4B: compressed sound archive??
-* 0x50: physics parameters file
-* 0x52: files of unknown format, but they appear to be radar maps
+* 0x4B: compressed DCS sound archive
+* 0x50: physics parameters
+* 0x52: files of unknown, seemingly compresseed format. but they appear to be radar maps
 * 0x53: sound data
 
 
