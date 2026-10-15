@@ -278,13 +278,18 @@ if (createdlist)
   draw_text(0,0,"Name:        R2Type: Location:  RefTableEntr:")
   }
 
- var yposoffset, displayed, scrup_on, scrdown_on, scrbar_on, calcpos;
+ var yposoffset, displayed, scrup_on, scrdown_on, scrbar_on, calcpos, divnum;
  yposoffset=0
  display=numtodisplay
  scrup_on=0
  scrdown_on=0
  scrbar_on=0
- calcpos=floor(29+startpos_top*(scroll_maxpercentage/(files[typeview]-numtodisplay)))
+ divnum=files[typeview]-numtodisplay
+ if divnum=0
+  {
+  divnum=1
+  }
+ calcpos=floor(29+startpos_top*(scroll_maxpercentage/(divnum)))
  scrbar_pos=calcpos
 
  if (!scrolling)
