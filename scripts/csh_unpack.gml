@@ -4,7 +4,7 @@ csh_unpack(samplerate)
 takes a csh file and outputs every sample into wav format
 */
 
-var file, folder, samplerate, samplelist, sampleoffset, samplesize, samplefile, numfiles, filesbuf, samplebuf, offsetbuf, tempbuf, dataoffset;
+var file, folder, samplerate, samplelist, sampleoffset, samplesize, samplefile, numfiles, filesbuf, samplebuf, offsetbuf, tempbuf, dataoffset, cshname;
 
 samplerate=argument0
 exportall_mode=1
@@ -18,6 +18,19 @@ if file=""
  exportall_mode=0
  exit
  }
+
+var find;
+find=string_length(file)
+do
+ {
+ if string_char_at(file,find)!="\"
+  {
+  find-=1
+  }
+ }
+until (string_char_at(file,find))="\"
+
+cshname=string_copy(file,find+1,(string_length(file)-find-4))
 
 exportall_dir=get_directory_alt("Select directory to output to.","")
 
@@ -69,7 +82,7 @@ for (i=0; i<numfiles; i+=1)
  {
  tempbuf=buffer_create()
  buffer_load_part(tempbuf,file,dataoffset,samplesize[i])
- samplefile=sound_createwavheader("sample_"+string(i)+"",samplesize[i],samplerate)
+ samplefile=sound_createwavheader(""+cshname+"_"+string(i)+"",samplesize[i],samplerate)
  buffer_save_append(tempbuf,samplefile)
  buffer_clear(tempbuf)
  dataoffset+=samplesize[i]
