@@ -33,6 +33,12 @@ types=0
 types2=0
 foundentry=-1
 
+scroll_curpercent=0
+scroll_maxpercentage=232
+scroll_hold=0
+scrbar_pos=29
+scrolling=0
+
 numboftypes=7
 TYPE_ALL=0
 TYPE_TEX=1
@@ -188,7 +194,10 @@ if (createdlist)
 
  if keyboard_check_pressed(vk_end)
   {
-  startpos_top=(files[typeview]-numtodisplay)
+  if (files[typeview]-numtodisplay)>=0
+   {
+   startpos_top=(files[typeview]-numtodisplay)
+   }
   }
 
 
@@ -218,9 +227,6 @@ applies_to=self
 draw_set_font(font0)
 draw_set_color(c_lime)
 
-//draw_text(0,150,r2file[r2target])
-//draw_text(100,150,tempstring)
-
 if message>0
  {
  draw_text(0,368,mes[cur_message])
@@ -233,13 +239,12 @@ if (processing)
   case SCR_SPLASH:
   if (!exportall_mode)
    {
-   draw_text(150,270,"Reading R2 directory...("+string(entry)+")")
+   draw_text(150,270,"Reading R2 directory and#checking file types...("+string(entry)+")")
    }
   else if (exportall_mode)
    {
    draw_text(0,368,"Exporting file "+string(exportall_file)+" of "+string(files[typeview])+"")
    }
-  //draw_text(150,270,"Reading R2 directory...")
   break
 
   case SCR_R2OPEN:
@@ -261,21 +266,140 @@ switch screen
  break
  }
 
-
 if (createdlist)
  {
- draw_rectangle_color(1,0,511,305,c_black,c_black,c_black,c_black,false)
+ draw_rectangle_color(0,0,512,306,c_black,c_black,c_black,c_black,false)
  if view=0
   {
-  draw_text(0,0,"Name:        Size:    Type:           FileNum:")
+  draw_text(0,0,"Name:        Size:    Type:           File:")
   }
  else
   {
-  draw_text(0,0,"Name:        R2Type:  Location:  RefTableEntr:")
+  draw_text(0,0,"Name:        R2Type: Location:  RefTableEntr:")
   }
- var yposoffset, displayed;
+
+ var yposoffset, displayed, scrup_on, scrdown_on, scrbar_on, calcpos;
  yposoffset=0
  display=numtodisplay
+ scrup_on=0
+ scrdown_on=0
+ scrbar_on=0
+ calcpos=floor(29+startpos_top*(scroll_maxpercentage/(files[typeview]-numtodisplay)))
+ scrbar_pos=calcpos
+
+ if (!scrolling)
+  {
+  if (mouse_y>scrbar_pos && mouse_y<scrbar_pos+(sprite_get_height(spr_scrollbar))) && (mouse_x>482 && mouse_x<512)
+   {
+   scrbar_on=1
+   if mouse_check_button(mb_left) && scroll_hold=0
+    {
+    scrolling=1
+    }
+   }
+  else if (mouse_y>scrbar_pos+(sprite_get_height(spr_scrollbar) && mouse_y<482)) && (mouse_x>482 && mouse_x<512)
+   {
+   if mouse_check_button_pressed(mb_left) || scroll_hold>30
+    {
+    scroll_down(numtodisplay*(files[typeview]/1000))
+    if scroll_hold>30
+     {
+     scroll_hold=26
+     }
+    }
+   }
+  else if (mouse_y<scrbar_pos && mouse_y>30) && (mouse_x>482 && mouse_x<512)
+   {
+   if mouse_check_button_pressed(mb_left) || scroll_hold>30
+    {
+    scroll_up(numtodisplay*(files[typeview]/1000))
+    if scroll_hold>30
+     {
+     scroll_hold=26
+     }
+    }
+   }
+  if mouse_check_button(mb_left)
+   {
+   scroll_hold+=1
+   }
+  else
+   {
+   scroll_hold=0
+   }
+  }
+ else if (scrolling)
+  {
+  scrbar_pos=mouse_y-7
+  scrbar_on=1
+  if scrbar_pos<28
+   {
+   scrbar_pos=28
+   }
+  else if scrbar_pos>261
+   {
+   scrbar_pos=261
+   }
+
+  if calcpos<>scrbar_pos
+   {
+   startpos_top=floor((scrbar_pos-30)*(files[typeview]/scroll_maxpercentage))
+
+   if startpos_top>(files[typeview]-numtodisplay)
+    {
+    startpos_top=(files[typeview]-numtodisplay)
+    }
+
+   if startpos_top<0
+    {
+    startpos_top=0
+    }
+
+   //calcpos=floor(29+startpos_top*(scroll_maxpercentage/(files[typeview]-numtodisplay)))
+   if !mouse_check_button(mb_left)
+    {
+    scrolling=0
+    scrbar_on=0
+    }
+   }
+  }
+
+  if (scrolling) && !mouse_check_button(mb_left)
+   {
+   scrolling=0
+   scrbar_on=0
+   }
+
+ if (mouse_y>0 && mouse_y<30) && (mouse_x>482 && mouse_x<512) && (!scrolling)
+  {
+  scrup_on=1
+  if mouse_check_button_pressed(mb_left) || scroll_hold>30
+   {
+   scroll_up(numtodisplay)
+   if scroll_hold>30
+    {
+    scroll_hold=25
+    }
+   }
+  }
+
+ if (mouse_y>276 && mouse_y<306) && (mouse_x>482 && mouse_x<512) && (!scrolling)
+  {
+  scrdown_on=1
+  if mouse_check_button_pressed(mb_left) || scroll_hold>30
+   {
+   scroll_down(numtodisplay)
+   if scroll_hold>30
+    {
+    scroll_hold=25
+    }
+   }
+  }
+
+ draw_sprite(spr_scrollbar,scrbar_on,482,scrbar_pos)
+ draw_sprite(spr_scrolltri,scrup_on,482,0)
+ draw_sprite_ext(spr_scrolltri,scrdown_on,482,306,1,-1,0,c_white,1)
+
  for (i=0; i<display; i+=1)
   {
   var namedraw, sizedraw, locdraw, type2draw, tabledraw, typedraw, xpos, ypos, yposoffset, col;
@@ -288,46 +412,8 @@ if (createdlist)
   locdraw=ds_list_find_value(locations[typeview],startpos_top+i)
   tabledraw=ds_list_find_value(tables[typeview],startpos_top+i)
   filedraw=ds_list_find_value(filenum[typeview],startpos_top+i)
-  /*switch typeview
-   {
-   case TYPE_TEX:
-   if typedraw<>TYPE_15P1TX && typedraw<>TYPE_14P2TX
-    {
-    yposoffset+=13
-    if (startpos_top+i)<entries
-     {
-     display+=1
-     }
-    continue
-    }
-   break
 
-   case TYPE_WOR:
-   if typedraw<>TYPE_TRACK
-    {
-    yposoffset+=13
-    if (startpos_top+i)<entries
-     {
-     display+=1
-     }
-    continue
-    }
-   break
-
-   case TYPE_MDL:
-   if typedraw<>TYPE_MODEL
-    {
-    yposoffset+=13
-    if (startpos_top+i)<entries
-     {
-     display+=1
-     }
-    continue
-    }
-   break
-   }*/
-
-  if (mouse_y>ypos-yposoffset && mouse_y<(ypos+12-yposoffset) && mouse_x>=xpos && mouse_x<xpos+512) && (!instance_exists(obj_contrbutton)) && ((startpos_top+i)<files[typeview])
+  if (mouse_y>ypos-yposoffset && mouse_y<(ypos+12-yposoffset) && mouse_x>=xpos && mouse_x<xpos+482) && (!instance_exists(obj_contrbutton)) && ((startpos_top+i)<files[typeview]) && (!scrolling)
    {
    if foundentry=(startpos_top+i)
     {
@@ -364,8 +450,8 @@ if (createdlist)
    else
     {
     draw_text_color(xpos+142,ypos-yposoffset,type2draw,col,col,col,col,1)
-    draw_text_color(xpos+241,ypos-yposoffset,locdraw,col,col,col,col,1)
-    draw_text_color(xpos+362,ypos-yposoffset,tabledraw,col,col,col,col,1)
+    draw_text_color(xpos+231,ypos-yposoffset,locdraw,col,col,col,col,1)
+    draw_text_color(xpos+352,ypos-yposoffset,tabledraw,col,col,col,col,1)
     }
     draw_text_color(xpos,ypos-yposoffset,namedraw,col,col,col,col,1)
    }
