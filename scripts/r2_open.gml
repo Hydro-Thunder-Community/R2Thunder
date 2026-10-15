@@ -134,7 +134,7 @@ while (entry<entries)
   }
 
  temptype=r2_checkfiletype(tempreadtype2,tempreadtype)
-
+ 
  //check for dreamcast pvr, but first we need to seek to where the header is located
  switch readbyte
   {
