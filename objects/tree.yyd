@@ -2,6 +2,8 @@
 |obj_button
 |obj_exitbutton
 |obj_openbutton
+|obj_unpackbutton
+|obj_repackbutton
 |obj_opencshbutton
 |obj_closbutton
 |obj_searcbutton

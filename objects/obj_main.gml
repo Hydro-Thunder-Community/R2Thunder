@@ -21,6 +21,10 @@ r2file[1]=""
 r2sign[R2VER_ORIG]="James Cameron Rules"
 r2sign[R2VER_WEAS]="Hydro Thunder Rules"
 r2signindex=0
+r2unpack=0
+r2repack=0
+r2repack_max=0
+r2repack_file=0
 entry=0
 byte=0
 entries=0
@@ -64,6 +68,7 @@ mes[MES_CLOSED]="Closed R2."
 mes[MES_ABORTD]="Export aborted."
 mes[MES_EXPORT]="File exported."
 mes[MES_PROCES]="Exporting file..."
+mes[MES_PACKED]="R2 packed successfully."
 message=0
 
 type[0]=""
@@ -115,6 +120,14 @@ with(obj_viewbutton)
  event_perform(ev_create,0)
  }
 with(obj_exportbutton)
+ {
+ event_perform(ev_create,0)
+ }
+with(obj_unpackbutton)
+ {
+ event_perform(ev_create,0)
+ }
+with(obj_repackbutton)
  {
  event_perform(ev_create,0)
  }
@@ -237,13 +250,17 @@ if (processing)
  switch screen
   {
   case SCR_SPLASH:
-  if (!exportall_mode)
+  if (!exportall_mode) && (!r2repack)
    {
    draw_text(150,270,"Reading R2 directory and#checking file types...("+string(entry)+")")
    }
   else if (exportall_mode)
    {
    draw_text(0,368,"Exporting file "+string(exportall_file)+" of "+string(files[typeview])+"")
+   }
+  else if (r2repack)
+   {
+   draw_text(0,368,"Packing file "+string(r2repack_file)+" of "+string(r2repack_max)+"")
    }
   break
 
