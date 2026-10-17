@@ -95,9 +95,6 @@ pvroffset=0
 //this flag makes obj_main output info about what the program is doing
 processing=1
 
-buffer_destroy(headerbuf)
-buffer_destroy(signaturebuf)
-
 //read the file directory section
 dirbuf=buffer_create()
 buffer_load_part(dirbuf,r2_file,filetableloc,(fileentrysize*entries))
@@ -281,8 +278,62 @@ createdlist=1
 r2target=1
 processing=0
 currentfile=argument0
-ping_message(MES_OPENED)
-swap_screen(SCR_R2OPEN)
+
+if r2unpack=0
+ {
+ ping_message(MES_OPENED)
+ swap_screen(SCR_R2OPEN)
+ }
+ 
+else if r2unpack=1
+ {
+ exportall_file=0
+ exportall_mode=2
+
+ exportall_dir=get_directory_alt("Select directory to unpack to.","")
+
+ if exportall_dir=""
+  {
+  r2_close()
+  ping_message(MES_ABORTD)
+  exit
+  }
+ processing=1
+ screen_redraw()
+ 
+ buffer_save(dirbuf,(exportall_dir+string("\")+"r2_directory.r2raw"))
+ buffer_save(headerbuf,(exportall_dir+string("\")+"r2_header.r2raw"))
+ 
+ directory_create(exportall_dir+string("\files\"))
+ exportall_dir=(exportall_dir+string("\files\"))
+ 
+ var export, export_max;
+ export=0
+ export_max=files[TYPE_ALL]
+ repeat(export_max)
+  {
+  var nameexp, sizeexp, locexp, type2exp, tableexp, typeexp;
+  nameexp=ds_list_find_value(names[TYPE_ALL],export)
+  sizeexp=ds_list_find_value(sizes[TYPE_ALL],export)
+  typeexp=ds_list_find_value(types[TYPE_ALL],export)
+  type2exp=ds_list_find_value(types2[TYPE_ALL],export)
+  locexp=ds_list_find_value(locations[TYPE_ALL],export)
+  tableexp=ds_list_find_value(tables[TYPE_ALL],export)
+  fileexp=ds_list_find_value(filenum[TYPE_ALL],export)
+
+  r2_extract(nameexp,typeexp,type2exp,locexp,sizeexp,tableexp)
+  exportall_file+=1
+  export+=1
+  screen_redraw()
+  }
+ processing=0
+ exportall_file=0
+ exportall_mode=0
+ exportall_dir=""
+ ping_message(MES_EXPORT)
+ r2unpack=0
+ r2_close()
+ }
 
 //destroy our buffers, we don't need them anymore
 buffer_destroy(readbuf)
@@ -290,3 +341,5 @@ buffer_destroy(bytebuf)
 buffer_destroy(dcbytebuf)
 buffer_destroy(pvrcheckbuf)
 buffer_destroy(dirbuf)
+buffer_destroy(headerbuf)
+buffer_destroy(signaturebuf)

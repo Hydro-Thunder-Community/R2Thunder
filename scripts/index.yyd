@@ -26,3 +26,4 @@ sound_createwavheader
 
 
 csh_unpack
+r2_repack

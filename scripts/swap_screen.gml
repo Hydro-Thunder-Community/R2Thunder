@@ -17,10 +17,16 @@ switch screen
  instance_deactivate_object(obj_viewbutton)
  instance_deactivate_object(obj_exportbutton)
  instance_activate_object(obj_openbutton)
+ instance_activate_object(obj_unpackbutton)
+ instance_activate_object(obj_opencshbutton)
+ instance_activate_object(obj_repackbutton)
  break
 
  case SCR_R2OPEN:
  instance_deactivate_object(obj_openbutton)
+ instance_deactivate_object(obj_unpackbutton)
+ instance_deactivate_object(obj_repackbutton)
+ instance_deactivate_object(obj_opencshbutton)
  instance_activate_object(obj_searcbutton)
  instance_activate_object(obj_closbutton)
  instance_activate_object(obj_switchbutton)
