@@ -285,6 +285,7 @@ if r2unpack=0
  swap_screen(SCR_R2OPEN)
  }
  
+//the unpacking process
 else if r2unpack=1
  {
  exportall_file=0
