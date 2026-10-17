@@ -13,13 +13,13 @@ This tool can interface with R2s of the following:
 * Offroad Thunder(Arcade)
 * Crank the Weasel(signature and file directory can be read, but extraction is not tested)
 
-Also, it can unpack the CSH sound banks from the arcade version of Hydro Thunder.
+It can unpack the CSH sound banks from the arcade version of Hydro Thunder.
 
 It can read the file directory, browse, filter, search, and extract any asset. As of this time, everything but textures and sounds of known formats are extracted raw, with their reftable. Known textures can be exported to BMP format, and known sounds can be exported to WAV format. Dreamcast PVRs can be detected, but they can only be extracted raw. It can also bulk extract everything shown on the currently selected filter.
 
-Current efforts and documentation are primarily focused on the original arcade version.
+It can also unpack the R2 used by Hydro Thunder completely, and rebuild it. No file changes have been tested at this time, and the rebuilding process is still early, currently.
 
-Modification and adding is not implemented at this time, but is a goal.
+Current efforts and documentation are primarily focused on the original arcade version.
 
 
 # Hotkeys
@@ -39,8 +39,7 @@ Modification and adding is not implemented at this time, but is a goal.
 
 # To-do:
 - UI features and QoL
-- when bulk extracting all files, seperate types by folder
-- file replacement and adding
+- build a directory from files in a folder
 
 
 # Technical Details
@@ -50,7 +49,7 @@ The R2 is a WAD like format. The header of most known R2s, in true Hydro Thunder
 
 The file directory begins at 0x200000, and the file data begins at 0x800000. These two address locations are baked into the R2's header, at 0x20 and 0x24 respectively. 
 
-Each file entry begins with the file's location(4 bytes), followed by the file's size(4 bytes), the number of reference table entries(4 bytes), the name of the file(11 bytes, plain text), a plain text name(which is also seen twice in the R2's header), and finally, 12 bytes of currently unknown purpose.
+Each file entry begins with the file's location(4 bytes), followed by the file's size(4 bytes), the number of reference table entries(4 bytes), the name of the file(11 bytes, plain text), a plain text name(which is also seen twice in the R2's header), 4 bytes which are a value the game adds with the file's size as part of a checksum, that's used in link communications with other cabinets, and finally, 8 bytes of unknown purpose. They don't seem to impact anything when changed.
 
 
 ## The R2 RefTable
@@ -64,7 +63,7 @@ Every file in the R2 has a header that is specific to this format. It can vary i
 ## Current known file types
 * 0x41: animation data
 * 0x42, 0x4D, 0x54: textures
-* 0x44: demo mode data(Offroad Thunder uses this type for more than just demo mode data)
+* 0x44: demo mode data(Offroad Thunder uses this type for more than just this)
 * 0x47: models
 * 0x48: world data
 * 0x4B: compressed DCS sound archive
@@ -77,12 +76,14 @@ Every file in the R2 has a header that is specific to this format. It can vary i
 * 16-bit color depth, 15 bits color, 1 bit alpha. uncompressed
 * 16-bit color depth, 12 bits color, 4 bits alpha. uncompressed
 * Unknown at this time, but used for every texture whose name contains "9" as the second to last character in the name. appears to be compressed
+  
 
 ## What world data is known to contain
 * track visual and collision models
 * boat start positions
 * water path data
 * object placement
+  
 
 ## The CSH Files
 These are uncompressed sound banks, stored in the D partition of a Hydro Thunder HDD. 
