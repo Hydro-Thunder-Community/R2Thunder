@@ -55,6 +55,7 @@ switch obj_main.screen
   strreturn=-1
   searchstr=get_string("Enter the asset name to search for.",searchmemory)
   searchmemory=searchstr
+
   if string_length(searchstr)=11
    {
    strreturn=ds_list_find_index(names[typeview],searchstr)
@@ -113,7 +114,15 @@ switch obj_main.screen
   var searchstr, strreturn, numb;
   searchstr=get_string("Enter the file number to go to.",filenummemory)
   filenummemory=searchstr
+
+  if !(is_real(searchstr))
+   {
+   show_message("Not a number!")
+   exit
+   }
+
   searchstr=real(searchstr)
+
 
   for(i=0; i<3; i+=1)
    {
