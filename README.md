@@ -23,7 +23,7 @@ Current efforts and documentation are primarily focused on the original arcade v
 
 
 # Hotkeys
-* Page Up/Down: Fastest way of scrolling the file list for right now.
+* Page Up/Down: Jump up/down 22 entries.
 * Home: Jump to the beginning of the file list.
 * End: Jump to the end of the file list.
 * Ctrl + Left/Right: If having searched for a file previously, this finds the previous/next file, respectively.
