@@ -17,7 +17,7 @@ It can unpack the CSH sound banks from the arcade version of Hydro Thunder.
 
 It can read the file directory, browse, filter, search, and extract any asset. As of this time, everything but textures and sounds of known formats are extracted raw, with their reftable. Known textures can be exported to BMP format, and known sounds can be exported to WAV format. Dreamcast PVRs can be detected, but they can only be extracted raw. It can also bulk extract everything shown on the currently selected filter.
 
-It can also unpack the R2 used by Hydro Thunder completely, and rebuild it(only Arcade has been tested). The file directory is completely custom generated based on what is contained in a folder with a "r2_header.r2raw", generated from an unpacked R2, and a "files" subfolder, containing the R2 files.
+It can also unpack the R2 used by Hydro Thunder completely, and rebuild it(currently, this process is only meant for the arcade version). The file directory is completely custom generated based on what is contained in a folder with a "r2_header.r2raw", generated from an unpacked R2, and a "files" subfolder, containing the R2 files.
 
 Current efforts and documentation are primarily focused on the original arcade version.
 
