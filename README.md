@@ -17,7 +17,7 @@ It can unpack the CSH sound banks from the arcade version of Hydro Thunder.
 
 It can read the file directory, browse, filter, search, and extract any asset. As of this time, everything but textures and sounds of known formats are extracted raw, with their reftable. Known textures can be exported to BMP format, and known sounds can be exported to WAV format. Dreamcast PVRs can be detected, but they can only be extracted raw. It can also bulk extract everything shown on the currently selected filter.
 
-It can also unpack the R2 used by Hydro Thunder completely, and rebuild it. No file changes have been tested at this time, and the rebuilding process is still early, currently.
+It can also unpack the R2 used by Hydro Thunder completely, and rebuild it(only Arcade has been tested). The file directory is completely custom generated based on what is contained in a folder with a "r2_header.r2raw", generated from an unpacked R2, and a "files" subfolder, containing the R2 files.
 
 Current efforts and documentation are primarily focused on the original arcade version.
 
@@ -49,6 +49,7 @@ The R2 is a WAD like format. The header of most known R2s, in true Hydro Thunder
 
 The file directory begins at 0x200000, and the file data begins at 0x800000. These two address locations are baked into the R2's header, at 0x20 and 0x24 respectively. 
 
+## The R2 File Directory
 Each file entry begins with the file's location(4 bytes), followed by the file's size(4 bytes), the number of reference table entries(4 bytes), the name of the file(11 bytes, plain text), a plain text name(which is also seen twice in the R2's header), 4 bytes which are a value the game adds with the file's size as part of a checksum, that's used in link communications with other cabinets, and finally, 8 bytes of unknown purpose. They don't seem to impact anything when changed.
 
 
