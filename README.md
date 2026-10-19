@@ -1,23 +1,23 @@
 # R2Thunder
-A tool to interface with the R2 file structure of Thunder games.
+A tool to interface with the R2 asset pack found in some Thunder series games.
 
 Written by AxlThunder in Game Maker 8.2. **No AI is used for any part of this project, and it will stay that way.**
 
 This project currently uses the following GM82 extensions:
 * 8.2 Core
 * 8.2 DirectX9
-* 8.2 Network(for the buffer_ functions used in file reading/writing)
+* 8.2 Buffer
 
 This tool can interface with R2s of the following:
 * Hydro Thunder(Arcade and Dreamcast)
 * Offroad Thunder(Arcade)
 * Crank the Weasel(signature and file directory can be read, but extraction is not tested)
 
-It can unpack the CSH sound banks from the arcade version of Hydro Thunder.
+The CSH sound banks from the arcade version of Hydro Thunder also can be unpacked with this tool.
 
 It can read the file directory, browse, filter, search, and extract any asset. As of this time, everything but textures and sounds of known formats are extracted raw, with their reftable. Known textures can be exported to BMP format, and known sounds can be exported to WAV format. Dreamcast PVRs can be detected, but they can only be extracted raw. It can also bulk extract everything shown on the currently selected filter.
 
-It can also unpack the R2 used by Hydro Thunder completely, and rebuild it(currently, this process is only meant for the arcade version). The file directory is completely custom generated based on what is contained in a folder with a "r2_header.r2raw", generated from an unpacked R2, and a "files" subfolder, containing the R2 files.
+It can also fully unpack the R2 used by Hydro Thunder, and rebuild it(currently, this process is only meant for the arcade version). The file directory is completely custom generated based on what is contained in a folder with a "r2_header.r2raw", and a "files" subfolder, containing the R2 files. R2Thunder will set it up like this for you upon unpacking an R2.
 
 Current efforts and documentation are primarily focused on the original arcade version.
 
@@ -86,9 +86,15 @@ Every file in the R2 has a header that is specific to this format. It can vary i
 * object placement
   
 
-## The CSH Files
+# The CSH Files
 These are uncompressed sound banks, stored in the D partition of a Hydro Thunder HDD. 
 * At 0x8 is the location where the sound data begins(4 bytes), from the start of where "DCS" is located.
 * At 0xC is the number of samples the bank contains(4 bytes).
 * Starting at 0xA, for as many samples as the file has, is the size of each sample, in 4 bytes each. There is also another set of 4 byte values for as many samples as the file contains. These aren't understood at this time.
 * The sample data is in the same format as the uncompressed sound data in the R2.
+
+# Building
+To build R2Thunder, all you need is an installation of Game Maker 8.2. This can be found here: https://gm82.cherry-treehouse.com/#Downloads
+The version currently used for R2Thunder is the latest as of this writing(ver. 8/17/26)
+
+Import the project through the .gm82. All extensions used should load automatically. From there, you're ready to build and run using F5/F6, or pressing the green/red play buttons in the top bar.
