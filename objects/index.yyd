@@ -13,3 +13,5 @@ obj_opencshbutton
 obj_exportbutton
 obj_unpackbutton
 obj_repackbutton
+obj_nextbutton
+obj_prevbutton

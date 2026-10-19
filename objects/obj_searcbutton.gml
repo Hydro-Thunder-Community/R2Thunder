@@ -87,8 +87,12 @@ switch obj_main.screen
      }
     }
    }
-
-  if strreturn!=-1
+  if strreturn=-1
+   {
+   searchmemory=""
+   exit
+   }
+  else if strreturn!=-1
    {
    startpos_top=strreturn
    foundentry=strreturn

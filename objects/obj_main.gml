@@ -23,6 +23,7 @@ r2sign[R2VER_WEAS]="Hydro Thunder Rules"
 r2signindex=0
 r2unpack=0
 r2repack=0
+r2merging=0
 r2repack_max=0
 r2repack_file=0
 entry=0
@@ -66,9 +67,11 @@ files[TYPE_DEM]=0
 cur_message=0
 mes[MES_CLOSED]="Closed R2."
 mes[MES_ABORTD]="Export aborted."
+mes[MES_ABORTP]="Packing aborted."
 mes[MES_EXPORT]="File exported."
 mes[MES_PROCES]="Exporting file..."
 mes[MES_PACKED]="R2 packed successfully."
+mes[MES_ERROR1]="No files in directory!"
 message=0
 
 type[0]=""
@@ -131,6 +134,14 @@ with(obj_repackbutton)
  {
  event_perform(ev_create,0)
  }
+with(obj_nextbutton)
+ {
+ event_perform(ev_create,0)
+ }
+with(obj_prevbutton)
+ {
+ event_perform(ev_create,0)
+ }
 
 swap_screen(SCR_SPLASH)
 #define Step_1
@@ -178,6 +189,11 @@ if (keyboard_check(ord("G")) && keyboard_check(vk_control))
   {
   event_user(1)
   }
+ }
+
+if (keyboard_check(vk_alt) && keyboard_check(vk_f4))
+ {
+ game_end()
  }
 
 if (createdlist)
@@ -250,7 +266,7 @@ if (processing)
  switch screen
   {
   case SCR_SPLASH:
-  if (!exportall_mode) && (!r2repack)
+  if (!exportall_mode) && (!r2repack) && (!r2merging)
    {
    draw_text(150,270,"Reading R2 directory and#checking file types...("+string(entry)+")")
    }
@@ -261,6 +277,10 @@ if (processing)
   else if (r2repack)
    {
    draw_text(0,368,"Packing file "+string(r2repack_file)+" of "+string(r2repack_max)+"")
+   }
+  else if (r2merging)
+   {
+   draw_text(0,368,"Merging into final R2...")
    }
   break
 
