@@ -66,4 +66,5 @@ screen_redraw()
 
 buffer_save(headerbuf,writefile)
 buffer_destroy(headerbuf)
+
 return writefile

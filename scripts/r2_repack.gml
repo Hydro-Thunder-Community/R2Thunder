@@ -17,7 +17,6 @@ r2dir_val1=$44
 r2dir_val2=$48
 r2entrysize=$4C
 
-
 r2files=0
 baseloc=$800000
 
@@ -30,7 +29,7 @@ dirinput=get_directory_alt("Select the directory to repack from.","")
 
 if dirinput=""
  {
- ping_message(MES_ABORTD)
+ ping_message(MES_ABORTP)
  exit
  }
 
@@ -48,6 +47,7 @@ filefind=file_find_first((dirinput)+"files\*.r2raw",0)
 
 if filefind=""
  {
+ ping_message(MES_ERROR1)
  exit
  }
 
@@ -82,6 +82,8 @@ do
  filefind=file_find_next()
  }
 until filefind=""
+
+file_find_close()
 
 //put in the header info that we need to until we can generate a complete header
 buffer_set_pos(r2header,$2C)
@@ -145,6 +147,11 @@ for(i=0; i<r2files; i+=1)
  screen_redraw()
  }
 
+r2repack=0
+r2merging=1
+
+screen_redraw()
+
 //merge everything together to form an r2
 r2mergedata=buffer_create()
 buffer_load(r2mergedata,dirinput+"HT.R2_filedata")
@@ -161,4 +168,6 @@ buffer_destroy(r2filedata)
 buffer_destroy(r2filetabledata)
 
 processing=0
-r2repack=0
+r2merging=0
+
+ping_message(MES_PACKED)

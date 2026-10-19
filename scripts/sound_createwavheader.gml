@@ -36,7 +36,6 @@ else if (exportall_mode)
  file=(exportall_dir+string("\")+string(name)+".wav")
  }
 
-
 ping_message(MES_PROCES)
 screen_redraw()
 
