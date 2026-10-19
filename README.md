@@ -39,7 +39,6 @@ Current efforts and documentation are primarily focused on the original arcade v
 
 # To-do:
 - UI features and QoL
-- build a directory from files in a folder
 
 
 # Technical Details
