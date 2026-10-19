@@ -39,9 +39,11 @@ types2=0
 foundentry=-1
 
 scroll_curpercent=0
-scroll_maxpercentage=232
+scroll_maxpercentage=218
 scroll_hold=0
 scrbar_pos=29
+scrup_pos=0
+scrdown_pos=291
 scrolling=0
 
 numboftypes=7
@@ -90,7 +92,7 @@ searchmemory=""
 filenummemory=""
 
 startpos_top=0
-numtodisplay=22
+numtodisplay=21
 
 button_x=15
 button_y=5
@@ -268,7 +270,7 @@ if (processing)
   case SCR_SPLASH:
   if (!exportall_mode) && (!r2repack) && (!r2merging)
    {
-   draw_text(150,270,"Reading R2 directory and#checking file types...("+string(entry)+")")
+   draw_text(150,250,"Reading R2 directory and#checking file types...("+string(entry)+")")
    }
   else if (exportall_mode)
    {
@@ -305,7 +307,7 @@ switch screen
 
 if (createdlist)
  {
- draw_rectangle_color(0,0,512,306,c_black,c_black,c_black,c_black,false)
+ draw_rectangle_color(0,0,512,290,c_black,c_black,c_black,c_black,false)
  if view=0
   {
   draw_text(0,0,"Name:        Size:    Type:           File:")
@@ -322,11 +324,13 @@ if (createdlist)
  scrdown_on=0
  scrbar_on=0
  divnum=files[typeview]-numtodisplay
+
  if divnum=0
   {
   divnum=1
   }
- calcpos=floor(29+startpos_top*(scroll_maxpercentage/(divnum)))
+
+ calcpos=round(29+startpos_top*(scroll_maxpercentage/(divnum)))
  scrbar_pos=calcpos
 
  if (!scrolling)
@@ -339,7 +343,7 @@ if (createdlist)
     scrolling=1
     }
    }
-  else if (mouse_y>scrbar_pos+(sprite_get_height(spr_scrollbar) && mouse_y<482)) && (mouse_x>482 && mouse_x<512)
+  else if (mouse_y>(scrbar_pos+sprite_get_height(spr_scrollbar)) && mouse_y<scrdown_pos-30) && (mouse_x>482 && mouse_x<512)
    {
    if mouse_check_button_pressed(mb_left) || scroll_hold>30
     {
@@ -350,7 +354,7 @@ if (createdlist)
      }
     }
    }
-  else if (mouse_y<scrbar_pos && mouse_y>30) && (mouse_x>482 && mouse_x<512)
+  else if (mouse_y<scrbar_pos && mouse_y>(scrup_pos+30)) && (mouse_x>482 && mouse_x<512)
    {
    if mouse_check_button_pressed(mb_left) || scroll_hold>30
     {
@@ -361,6 +365,7 @@ if (createdlist)
      }
     }
    }
+
   if mouse_check_button(mb_left)
    {
    scroll_hold+=1
@@ -378,14 +383,14 @@ if (createdlist)
    {
    scrbar_pos=28
    }
-  else if scrbar_pos>261
+  else if scrbar_pos>(scroll_maxpercentage+29)
    {
-   scrbar_pos=261
+   scrbar_pos=(scroll_maxpercentage+29)
    }
 
   if calcpos<>scrbar_pos
    {
-   startpos_top=floor((scrbar_pos-30)*(files[typeview]/scroll_maxpercentage))
+   startpos_top=round((scrbar_pos-30)*(files[typeview]/scroll_maxpercentage))
 
    if startpos_top>(files[typeview]-numtodisplay)
     {
@@ -398,7 +403,7 @@ if (createdlist)
     }
 
    //calcpos=floor(29+startpos_top*(scroll_maxpercentage/(files[typeview]-numtodisplay)))
-   if !mouse_check_button(mb_left)
+   if (!mouse_check_button(mb_left))
     {
     scrolling=0
     scrbar_on=0
@@ -406,13 +411,13 @@ if (createdlist)
    }
   }
 
-  if (scrolling) && !mouse_check_button(mb_left)
-   {
-   scrolling=0
-   scrbar_on=0
-   }
+ if (scrolling) && (!mouse_check_button(mb_left))
+  {
+  scrolling=0
+  scrbar_on=0
+  }
 
- if (mouse_y>0 && mouse_y<30) && (mouse_x>482 && mouse_x<512) && (!scrolling)
+ if (mouse_y>scrup_pos && mouse_y<scrup_pos+30) && (mouse_x>482 && mouse_x<512) && (!scrolling)
   {
   scrup_on=1
   if mouse_check_button_pressed(mb_left) || scroll_hold>30
@@ -425,7 +430,7 @@ if (createdlist)
    }
   }
 
- if (mouse_y>276 && mouse_y<306) && (mouse_x>482 && mouse_x<512) && (!scrolling)
+ if (mouse_y>scrdown_pos-30 && mouse_y<scrdown_pos) && (mouse_x>482 && mouse_x<512) && (!scrolling)
   {
   scrdown_on=1
   if mouse_check_button_pressed(mb_left) || scroll_hold>30
@@ -439,8 +444,8 @@ if (createdlist)
   }
 
  draw_sprite(spr_scrollbar,scrbar_on,482,scrbar_pos)
- draw_sprite(spr_scrolltri,scrup_on,482,0)
- draw_sprite_ext(spr_scrolltri,scrdown_on,482,306,1,-1,0,c_white,1)
+ draw_sprite(spr_scrolltri,scrup_on,482,scrup_pos)
+ draw_sprite_ext(spr_scrolltri,scrdown_on,482,scrdown_pos,1,-1,0,c_white,1)
 
  for (i=0; i<display; i+=1)
   {
