@@ -23,12 +23,12 @@ Current efforts and documentation are primarily focused on the original arcade v
 
 
 # Hotkeys
-* Page Up/Down: Jump up/down 22 entries.
+* Page Up/Down: Jump up/down a screen's worth of entries.
 * Home: Jump to the beginning of the file list.
 * End: Jump to the end of the file list.
 * Ctrl + Left/Right: If having searched for a file previously, this finds the previous/next file, respectively.
 * Ctrl + F: Shortcut to file search.
-* Ctrl + G: Shortcut to file number jump.
+* Ctrl + G: Shortcut to file goto.
 
 
 # Known Issues
@@ -39,7 +39,11 @@ Current efforts and documentation are primarily focused on the original arcade v
 
 # To-do:
 - UI features and QoL
-
+- Improve R2 header writing during rebuilding
+- When extracting a file raw, give option to also extract the files in it's reftable
+- Dreamcast specific handling
+- Offroad Thunder specific handling
+- Crank the Weasel specific handling
 
 # Technical Details
 Efforts to document this format are still ongoing, so the information below is subject to additions and changes.
